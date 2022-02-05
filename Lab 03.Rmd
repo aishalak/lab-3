@@ -1,0 +1,108 @@
+---
+title: "Lab 3"
+author: "Aisha Lakshman"
+date: "2/3/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+library(openintro)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(broom)
+library(modelr)
+library(openintro)
+data(elmhurst)
+
+
+```
+Exercise 1
+```{r}
+ggplot(data = elmhurst, aes(x = gift_aid)) +
+  geom_histogram() +
+  labs(x = "Gift Aid", title = "Distribution of Gift Aid")
+```
+The distribution is bell-shaped, approximately following normal distribution. It looks like there are some outliers in the dataset towards the right side of the distribution, where gift aid is around $33,000.
+
+Exercise 2
+```{r}
+
+elmhurst %>%
+  summarise(n = n(), mean = mean(gift_aid),
+            sd = sd(gift_aid))
+```
+The mean of gift_aid is approximately 20 thousand dollars, and we can see from the distribution that the center of the spread is under gift_aid = 20 (thousand dollars). The standard deviation of gift aid is approximately 5.4 thousand dollars, which is a relatively high standard deviation under a normal distribution. This tells us that the dataset values are far from the mean, hence the outliers.   
+
+Exercise 3
+```{r}
+ggplot(data = elmhurst, aes(x = family_income)) + 
+  geom_histogram() +
+  labs(x = "Family Income", title = "Distribution of Family Income")
+```
+```{r}
+
+elmhurst %>%
+  summarise(n = n(), mean = mean(family_income),
+            sd = sd(family_income))
+```
+ The distribution is bell-shaped, approximately following a normal distribution. However, there are outliers to the right of the distribution, where family income is approximately greater than or equal to 200,000. This follows the elmhurst dataset because few entries for family income are 200,000 dollars or greater. The summary statistics for family income further explain the distribution. The mean is approximately 102,000 thousand dollars, and considering the outliers, the mean value is raised by the family incomes that are 200,000 or greater. The standard deviation is approximately 63 thousand dollars, reaffirming the outliers of family income data. 
+
+Exercise 4
+```{r}
+ggplot(data = elmhurst, mapping = aes(x = family_income, y = gift_aid)) +
+  geom_point() +
+  labs(x = "Family Income", y = "Gift Aid", title = "Gift Aid vs. Family Income")
+```
+Exercise 5
+```{r}
+model <- lm(gift_aid ~ family_income, data = elmhurst)
+tidy(model, conf.int=TRUE) %>% kable(format = "markdown", digits = 3)
+```
+   
+Exercise 6
+
+In interpreting the slope: for each additional percentage point in family income, gift aid is expected to decrease by 0.043 percentage points on average.   
+
+Exercise 7
+```{r}
+elmhurst <- elmhurst %>% 
+  mutate(resid = residuals(model))
+```
+
+Exercise 8
+```{r}
+ggplot(data = elmhurst, mapping = aes(x = family_income, y = residuals(model))) +
+  geom_point() + 
+  labs(x = "Family Income", y = "Residuals", title = "Residuals vs. Family Income")
+```
+Exercise 9
+
+Based on looking at the Residuals vs. Family Income scatterplot, the linearity condition is satisfied. We can see that the points are evenly distributed, tending to cluster in the center of the plot. Additionally, the points reveal no clear pattern or shape, which means that our linear model adequately describes the relationship between gift aid and family income. Further, the absence of a discernible shape indicates that all that is left are random errors that can't be accounted for in the linear model. 
+
+
