@@ -105,4 +105,44 @@ Exercise 9
 
 Based on looking at the Residuals vs. Family Income scatterplot, the linearity condition is satisfied. We can see that the points are evenly distributed, tending to cluster in the center of the plot. Additionally, the points reveal no clear pattern or shape, which means that our linear model adequately describes the relationship between gift aid and family income. Further, the absence of a discernible shape indicates that all that is left are random errors that can't be accounted for in the linear model. 
 
+Exercise 10
+
+By looking at the scatterplot from exercise 8, we can see an even distribution of the "y's": there is no "fan" pattern. The equal distribution of points in the scatterplot indicates that the constant variance assumption is satisfied. 
+
+Exercise 11
+
+```{r}
+ggplot(data = elmhurst, mapping = aes(x = residuals(model))) +
+  geom_histogram() +
+  labs(x = "Residuals", title = "Distribution of Residuals" )
+```
+The distribution of residuals in the above histogram indicates that the Normality assumption is satisfied. The Normality assumption is satisfied because the distribution is unimodal and symmetric, approximately following a normal distribution. 
+
+Exercise 12
+
+Based on the data description provided in the lab 3 instructions, I would say that the independence assumption is satisfied. One observation of family income does not depend on another family income, so the predictor variables are independent. However, more info about the data might yield a different conclusion. 
+If there is a certain amount of money allocated to gift aid, gift aid might be relative to the pool of family income observations. I'm not sure if that applies here because gift aid is the response variable, but I thought it wouldn't hurt to mention.
+
+Exercise 13
+
+```{r}
+rsquared <- summary(model)$r.squared
+rsquared
+```
+
+The calculation of R^2 = 0.2485582 (approximately 25%). This R^2 value indicates that 25% of the linear model's variation can be explained by variations of the inputs or predictor values (family income).
+
+Exercise 14
+```{r}
+x0 <- data.frame(family_income = (90))
+predict.lm(model, x0, interval = "prediction", conf.level = 0.95)
+
+```
+
+According to this calculation, the 95% confidence interval is approximately (10.7, 30). Based on a family income = 90,000 dollars, I would predict that this persons gift aid will fall in the range of 10.7 thousand dollars and 30 thousand dollars. 
+
+Exercise 15
+
+I do not think that it would be wise for this student to use my model to calculate the predicted gift aid. There are no entries in the dataset for family income that are close to a value of 310 thousand dollars, and as we have seen, observations with high family incomes are outliers in the dataset. Therefore, in the case of this student I don't think my model would accurately predict gift aid for the given predictor variable.  
+
 
